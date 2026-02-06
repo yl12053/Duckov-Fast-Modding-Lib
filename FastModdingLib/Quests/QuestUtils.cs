@@ -1,10 +1,15 @@
-﻿using Duckov.Quests;
+﻿using Duckov.Modding;
+using Duckov.Quests;
 using Duckov.Quests.Relations;
 using Duckov.Quests.Tasks;
 using Duckov.Utilities;
+using FastModdingLib.Quests;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -16,10 +21,12 @@ namespace FastModdingLib
         public static void RegisterQuest(QuestData data, string modid = "FastModdingLib")
         {
             Quest quest = new GameObject($"Quest_{data.displayName}").AddComponent<Quest>();
-            UnityEngine.Object.DontDestroyOnLoad(quest);
+            UnityEngine.Object.DontDestroyOnLoad(quest.gameObject);
+            quest.gameObject.transform.SetParent(ModManager.Instance.activeMods["FastModdingLib"].transform);
+            quest.gameObject.SetActive(false);
             quest.DisplayNameRaw = data.displayName;
             quest.DescriptionRaw = data.description;
-            quest.ID = data.ID;
+            quest.id = data.ID;
             quest.QuestGiverID = data.questGiver;
             quest.requireLevel = data.requireLevel;
             
@@ -52,13 +59,8 @@ namespace FastModdingLib
                 }
             }
             GameplayDataSettings.QuestCollection.Add(quest);
-            quest.needInspection = true;
             addedQuests.Add(quest, modid);
             Debug.Log($"[FML] Registered quest: {data.displayName} (ID: {data.ID}) from mod: {modid}");
-            foreach (var item in quest.tasks)
-            {
-                Debug.Log($"[FML] Task:{item.gameObject.name}, {item.master.name}");
-            }
             
         }
 

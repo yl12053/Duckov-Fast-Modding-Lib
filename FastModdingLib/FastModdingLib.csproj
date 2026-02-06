@@ -39,6 +39,14 @@
 		<Reference Include="$(DuckovPath)$(SubPath)UniTask*">
 			<Private>False</Private>
 		</Reference>
+
+		<Reference Include="$(DuckovPath)$(SubPath)Eflatun.SceneReference.dll">
+			<Private>False</Private>
+		</Reference>
+
+		<Reference Include="$(DuckovPath)$(SubPath)Plugins.dll">
+			<Private>False</Private>
+		</Reference>
     </ItemGroup>
 	<ItemGroup>
 		<!-- All members in an assembly -->

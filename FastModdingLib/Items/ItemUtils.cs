@@ -91,6 +91,26 @@ namespace FastModdingLib
             }
         }
 
+        public static Item GetCustomItem(string modPath, ItemData config, string modid = "old_fml_version")
+        {
+            ItemBuilder itemBuilder = ItemBuilder.New()
+                .TypeID(config.itemId)
+                .EnableStacking(config.maxStackCount, 1)
+                .Icon(ItemUtils.LoadEmbeddedSprite(modPath, config.spritePath, config.itemId));
+
+            config.modifiers.ForEach(modifier => {
+                itemBuilder.Modifier(modifier.getModifier());
+            });
+
+            Item component = itemBuilder
+                .Instantiate();
+
+            UnityEngine.Object.DontDestroyOnLoad(component);
+            SetItemProperties(component, config);
+
+            return component;
+        }
+
         public static void CreateCustomItem(string modPath, ItemData config, string modid = "old_fml_version")
         {
             ItemBuilder itemBuilder = ItemBuilder.New()
@@ -134,13 +154,18 @@ namespace FastModdingLib
             item.DisplayNameRaw = config.localizationKey;
             item.MaxDurability = config.maxDurability;
             item.Durability = config.maxDurability;
-
             ItemUtils.createUsage(item, config);
             item.Tags.Clear();
             foreach (string tagName in config.tags)
             {
                 item.Tags.Add(GetTargetTag(tagName));
             }
+        }
+
+        public static void SetItemGraphic(Item item, AssetBundle assetBundle, string name)
+        {
+            GameObject graphic = assetBundle.LoadAsset<GameObject>(name);
+            item.itemGraphic = graphic.GetComponent<ItemGraphicInfo>();
         }
 
         public static Tag GetTargetTag(string tagName)
@@ -173,17 +198,6 @@ namespace FastModdingLib
                         prefab.Slots[slot.Key].requireTags = rifle.Slots[slot.Key].requireTags;
                         prefab.Slots[slot.Key].excludeTags = rifle.Slots[slot.Key].excludeTags;
                     }
-                //if (slot.Key.Equals("Special")) 
-                //{
-                //    List<Tag> tags = new List<Tag>();
-                //    foreach (var item in prefab.Slots[slot.Key].requireTags)
-                //    {
-                //        Tag tag = ItemUtils.GetTargetTag(item.displayNameKey);
-                //        tags.Add(tag);
-                //    }
-                //    prefab.Slots[slot.Key].requireTags.Clear();
-                //    prefab.Slots[slot.Key].requireTags.AddRange(tags);
-                //}
             }
             
             ItemSetting_Gun rifleSetting = rifle.GetComponent<ItemSetting_Gun>();

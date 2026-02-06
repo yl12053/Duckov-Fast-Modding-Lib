@@ -1,6 +1,7 @@
 ﻿using Duckov.Quests;
 using Duckov.Quests.Rewards;
 using Duckov.Quests.Tasks;
+using FastModdingLib.Quests;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,9 +34,7 @@ namespace FastModdingLib
         public int itemTypeID;
         public int requiredAmount;
         public override Task SetTask(Quest quest) {
-            GameObject gameObject = new GameObject($"SubmitItems_{quest.id}_{this.id}");
-            gameObject.transform.SetParent(quest.transform);
-            SubmitItems submit = gameObject.AddComponent<SubmitItems>();
+            SubmitItems submit = quest.gameObject.AddComponent<SubmitItems>();
             submit.id = id;
             submit.itemTypeID = itemTypeID;
             submit.requiredAmount = requiredAmount;
@@ -49,9 +48,7 @@ namespace FastModdingLib
 
         public override Task SetTask(Quest quest)
         {
-            GameObject gameObject = new GameObject($"SubmitMoney_{quest.id}_{this.id}");
-            gameObject.transform.SetParent(quest.transform);
-            QuestTask_SubmitMoney task = gameObject.AddComponent<QuestTask_SubmitMoney>();
+            QuestTask_SubmitMoney task = quest.gameObject.AddComponent<QuestTask_SubmitMoney>();
             task.id = id;
             task.money = money;
             task.master = quest;
@@ -65,8 +62,6 @@ namespace FastModdingLib
         public int amount;
         public override Task SetTask(Quest quest)
         {
-            GameObject gameObject = new GameObject($"UseItem_{quest.id}_{this.id}");
-            gameObject.transform.SetParent(quest.transform);
             QuestTask_UseItem task = quest.gameObject.AddComponent<QuestTask_UseItem>();
             task.id = id;
             task.itemTypeID = itemTypeID;
@@ -85,11 +80,9 @@ namespace FastModdingLib
         public string requireEnemy = string.Empty;
         public override Task SetTask(Quest quest)
         {
-            GameObject gameObject = new GameObject($"KillCount_{quest.id}_{this.id}");
-            gameObject.transform.SetParent(quest.transform);
-            
-            QuestTask_KillCount task = gameObject.AddComponent<QuestTask_KillCount>();
+            TaskKillCountFix task = quest.gameObject.AddComponent<TaskKillCountFix>();
             task.id = id;
+            task.resetOnLevelInitialized = false;
             task.requireAmount = requireAmount;
             if (weaponTypeID != -1)
             {
@@ -110,7 +103,7 @@ namespace FastModdingLib
             }
 
             task.master = quest;
-
+            
             return task;
         }
     }
@@ -126,15 +119,11 @@ namespace FastModdingLib
         public int amount;
         public override Reward SetReward(Quest quest)
         {
-            GameObject gameObject = new GameObject($"RewardItem_{quest.id}_{this.id}");
-            gameObject.transform.SetParent(quest.transform);
-            gameObject.SetActive(false);
-            RewardItem reward = gameObject.AddComponent<RewardItem>();
+            RewardItem reward = quest.gameObject.AddComponent<RewardItem>();
             reward.id = id;
             reward.itemTypeID = itemTypeID;
             reward.amount = amount;
             reward.master = quest;
-            gameObject.SetActive(true);
             return reward;
         }
     }
@@ -143,14 +132,10 @@ namespace FastModdingLib
         public int amount;
         public override Reward SetReward(Quest quest)
         {
-            GameObject gameObject = new GameObject($"RewardEXP_{quest.id}_{this.id}");
-            gameObject.transform.SetParent(quest.transform);
-            gameObject.SetActive(false);
-            QuestReward_EXP reward = gameObject.AddComponent<QuestReward_EXP>();
+            QuestReward_EXP reward = quest.gameObject.AddComponent<QuestReward_EXP>();
             reward.id = id;
             reward.amount = amount;
             reward.master = quest;
-            gameObject.SetActive(true);
             return reward;
         }
     }
@@ -160,14 +145,10 @@ namespace FastModdingLib
         public int amount;
         public override Reward SetReward(Quest quest)
         {
-            GameObject gameObject = new GameObject($"RewardMoney_{quest.id}_{this.id}");
-            gameObject.transform.SetParent(quest.transform);
-            gameObject.SetActive(false);
-            QuestReward_Money reward = gameObject.AddComponent<QuestReward_Money>();
+            QuestReward_Money reward = quest.gameObject.AddComponent<QuestReward_Money>();
             reward.id = id;
             reward.amount = amount;
             reward.master = quest;
-            gameObject.SetActive(true);
             return reward;
         }
     }
@@ -176,14 +157,10 @@ namespace FastModdingLib
         public int itemTypeID;
         public override Reward SetReward(Quest quest)
         {
-            GameObject gameObject = new GameObject($"RewardUnlockItem_{quest.id}_{this.id}");
-            gameObject.transform.SetParent(quest.transform);
-            gameObject.SetActive(false);
-            QuestReward_UnlockStockItem reward = gameObject.AddComponent<QuestReward_UnlockStockItem>();
+            QuestReward_UnlockStockItem reward = quest.gameObject.AddComponent<QuestReward_UnlockStockItem>();
             reward.id = id;
             reward.unlockItem = itemTypeID;
             reward.master = quest;
-            gameObject.SetActive(true);
             return reward;
         }
     }
