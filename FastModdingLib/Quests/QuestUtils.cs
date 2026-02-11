@@ -1,17 +1,8 @@
-﻿using Duckov.Modding;
-using Duckov.Quests;
+﻿using Duckov.Quests;
 using Duckov.Quests.Relations;
-using Duckov.Quests.Tasks;
 using Duckov.Utilities;
-using FastModdingLib.Quests;
-using JetBrains.Annotations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
 
 namespace FastModdingLib
 {
@@ -22,11 +13,10 @@ namespace FastModdingLib
         {
             Quest quest = new GameObject($"Quest_{data.displayName}").AddComponent<Quest>();
             UnityEngine.Object.DontDestroyOnLoad(quest.gameObject);
-            quest.gameObject.transform.SetParent(ModManager.Instance.activeMods["FastModdingLib"].transform);
             quest.gameObject.SetActive(false);
             quest.DisplayNameRaw = data.displayName;
             quest.DescriptionRaw = data.description;
-            quest.id = data.ID;
+            quest.ID = data.ID;
             quest.QuestGiverID = data.questGiver;
             quest.requireLevel = data.requireLevel;
             
@@ -72,7 +62,9 @@ namespace FastModdingLib
                 {
                     GameplayDataSettings.QuestCollection.Remove(item.Key);
                     UnityEngine.Object.Destroy(item.Key.gameObject);
+                    GameplayDataSettings.QuestRelation.RemoveNode(GameplayDataSettings.QuestRelation.GetNode(ID));
                     addedQuests.Remove(item.Key);
+                    Debug.Log($"Unregistered custom quest: {item.Key.id}");
                     break;
                 }
             }
@@ -86,8 +78,9 @@ namespace FastModdingLib
                 {
                     GameplayDataSettings.QuestCollection.Remove(item.Key);
                     UnityEngine.Object.Destroy(item.Key.gameObject);
+                    GameplayDataSettings.QuestRelation.RemoveNode(GameplayDataSettings.QuestRelation.GetNode(item.Key.ID));
                     addedQuests.Remove(item.Key);
-                    break;
+                    Debug.Log($"Unregistered custom quest: {item.Key.id}");
                 }
             }
         }

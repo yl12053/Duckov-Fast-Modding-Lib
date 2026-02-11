@@ -18,20 +18,6 @@ namespace FastModdingLib
         {
             DecomposeDatabase instance = DecomposeDatabase.Instance;
 
-            DecomposeFormula[] collection = instance.entries;
-            List<DecomposeFormula> list = new List<DecomposeFormula>(collection);
-            foreach (DecomposeFormula item2 in list)
-            {
-                if (item2.item == itemId && item2.result.items.Any())
-                {
-                    Debug.LogWarning($"Existed decompose formula, item: {itemId}");
-                    foreach (var itemResult in item2.result.items)
-                    {
-                        Debug.LogWarning($"itemResult: {itemResult.id} : {itemResult.amount}");
-                    }
-                    return;
-                }
-            }
             DecomposeFormula item = new DecomposeFormula
             {
                 item = itemId,
@@ -52,14 +38,14 @@ namespace FastModdingLib
             }
             result.items = array;
             item.result = result;
-            list.Add(item);
-            collection = list.ToArray();
+
             if (!addedDecomposeItemIds.ContainsKey(itemId))
             {
                 addedDecomposeItemIds.Add(itemId, modid);
             }
             Debug.Log($"Added decompose: {itemId}");
-            typeof(DecomposeDatabase).GetMethod("RebuildDictionary", BindingFlags.Instance | BindingFlags.NonPublic)?.Invoke(instance, null);
+
+            instance.Dic.Add(itemId, item);
         }
 
         public static void RemoveAllAddedDecomposeFormulas(string modid = "old_fml_version")
