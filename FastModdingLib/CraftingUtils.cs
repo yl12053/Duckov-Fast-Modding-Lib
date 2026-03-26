@@ -17,7 +17,6 @@ namespace FastModdingLib
         public static void AddDecomposeFormula(int itemId, long money, (int id, long amount)[] resultItems, string modid = "old_fml_version")
         {
             DecomposeDatabase instance = DecomposeDatabase.Instance;
-
             DecomposeFormula item = new DecomposeFormula
             {
                 item = itemId,
@@ -46,6 +45,7 @@ namespace FastModdingLib
             Debug.Log($"Added decompose: {itemId}");
 
             instance.Dic.Add(itemId, item);
+            instance.entries = instance.Dic.Values.ToArray();
         }
 
         public static void RemoveAllAddedDecomposeFormulas(string modid = "old_fml_version")

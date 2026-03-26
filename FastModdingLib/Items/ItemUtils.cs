@@ -234,5 +234,35 @@ namespace FastModdingLib
                 ItemUtils.addedItemIds.Remove(itemId.Key);
             }
         }
+
+        public static void CreateCustomBullet(BulletData config, string modPath, string modid = "TopTierWeaponExpansion")
+        {
+            Item component = ItemBuilder.New()
+                .TypeID(config.itemId)
+                .EnableStacking(config.maxStackCount, 1)
+                .Icon(ItemUtils.LoadEmbeddedSprite(modPath, config.spritePath, config.itemId))
+                .SetConstant("Caliber", config.Caliber, true)
+                .SetConstant("SFX_Put", config.SFX_Put, false)
+                .SetConstant("CritDamageFactorGain", config.CritDamageFactorGain, config.CritDamageFactorGain != 0F)
+                .SetConstant("damageMultiplier", config.damageMultiplier, config.damageMultiplier != 0F)
+
+                .SetConstant("CritRateGain", config.CritRateGain, config.CritRateGain != 0F)
+                .SetConstant("ArmorPiercingGain", config.ArmorPiercingGain, config.ArmorPiercingGain != 0F)
+
+                .SetConstant("ArmorBreakGain", config.ArmorBreakGain, config.ArmorBreakGain != 0F)
+                .SetConstant("DurabilityCost", config.DurabilityCost, config.DurabilityCost != 0F)
+
+                .SetConstant("ExplosionRange", config.ExplosionRange, config.ExplosionRange != 0F)
+                .SetConstant("ExplosionDamage", config.ExplosionDamage, config.ExplosionDamage != 0F)
+
+                .SetConstant("buffChanceMultiplier", config.buffChanceMultiplier, true)
+                .SetConstant("bleedChance", config.bleedChance, true)
+
+                .Instantiate();
+            UnityEngine.Object.DontDestroyOnLoad(component);
+            ItemUtils.SetItemProperties(component, config);
+            ItemSetting_Bullet setting = component.AddComponent<ItemSetting_Bullet>();
+            ItemUtils.RegisterItem(component, modid);
+        }
     }
 }
