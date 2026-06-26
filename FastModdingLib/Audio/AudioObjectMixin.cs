@@ -24,7 +24,7 @@ namespace FastModdingLib.Audio
                 string fileLoc = Path.Combine(modDirectory, assetLoc.ToString());
                 if (File.Exists(fileLoc) == true)
                 {
-                    __result = __instance.PostCustomSFX(fileLoc, false);
+                    __result = __instance.PostCustomSFX(fileLoc, doRelease);
                     return false;
                 }
                 Debug.Log("File Not Found :"+ fileLoc);
