@@ -13,5 +13,6 @@ namespace FastModdingLib
         {
             return GameplayDataSettings.CharacterRandomPresetData.presets.Where(p => p.nameKey == name).First();
         }
+
     }
 }

@@ -5,6 +5,7 @@ namespace FastModdingLib
     public static class ShopUtils
     {
         public static void AddGoods(ShopGoodsData data) {
+            
             GameplayDataSettings.StockshopDatabase.GetMerchantProfile(data.merchantProfileID).entries.Add(new StockShopDatabase.ItemEntry
             {
                 typeID = data.typeID,

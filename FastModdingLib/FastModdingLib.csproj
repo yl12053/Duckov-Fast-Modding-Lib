@@ -47,6 +47,15 @@
 		<Reference Include="$(DuckovPath)$(SubPath)Plugins.dll">
 			<Private>False</Private>
 		</Reference>
+
+		<Reference Include="$(DuckovPath)$(SubPath)FMODUnity.dll">
+			<Private>False</Private>
+		</Reference>
+
+		<Reference Include="0Harmony">
+			<HintPath>0Harmony.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
     </ItemGroup>
 	<ItemGroup>
 		<!-- All members in an assembly -->
