@@ -4,8 +4,8 @@ namespace FastModdingLib.Utils
 {
     public class Identifier: IEquatable<Identifier>
     {
-        private string _domain;
-        private string _path;
+        private readonly string _domain;
+        private readonly string _path;
         
         public string Domain
         {
@@ -16,24 +16,38 @@ namespace FastModdingLib.Utils
             get => _path;
         }
 
+        private static void isValid(string str, string hint)
+        {
+            if (str.Contains(":"))
+            {
+                throw new ArgumentException($":(Colon) is not accepted in {hint}");
+            }
+
+            if (str.Equals(""))
+            {
+                throw new ArgumentException($"{str} must not be empty");
+            }
+
+            if (str.Contains(".."))
+            {
+                throw new ArgumentException($"Double dot is not accepted in {hint}");
+            }
+            
+            if (str.Contains("/"))
+            {
+                throw new ArgumentException($"/(Forward slash) is not accepted in {hint}");
+            }
+            
+            if (str.Contains("\\"))
+            {
+                throw new ArgumentException($"\\(Backward slash) is not accepted in {hint}");
+            }
+        }
+
         public Identifier(string domain, string path)
         {
-            if (domain.Contains(":"))
-            {
-                throw new ArgumentException(":(Colon) is not accepted in domain");
-            }
-            if (domain.Equals(""))
-            {
-                throw new ArgumentException("Domain must not be empty");
-            }
-            if (path.Contains(":"))
-            {
-                throw new ArgumentException(":(Colon) is not accepted in path");
-            }
-            if (path.Equals(""))
-            {
-                throw new ArgumentException("Path must not be empty");
-            }
+            isValid(domain, "domain");
+            isValid(path, "path");
             _domain = domain;
             _path = path;
         }
@@ -56,22 +70,8 @@ namespace FastModdingLib.Utils
 
             string domain = splitted[0];
             string path = splitted[1];
-            if (domain.Contains(":"))
-            {
-                throw new ArgumentException(":(Colon) is not accepted in domain");
-            }
-            if (domain.Equals(""))
-            {
-                throw new ArgumentException("Domain must not be empty");
-            }
-            if (path.Contains(":"))
-            {
-                throw new ArgumentException(":(Colon) is not accepted in path");
-            }
-            if (path.Equals(""))
-            {
-                throw new ArgumentException("Path must not be empty");
-            }
+            isValid(domain, "domain");
+            isValid(path, "path");
             _domain = domain;
             _path = path;
         }
